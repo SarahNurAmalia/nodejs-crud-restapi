@@ -1,1 +1,3 @@
 # nodejs-crud-restapi
+Project ini dijalankan dengan memastikan layanan MySQL sudah aktif terlebih dahulu. Setelah database siap digunakan, aplikasi Node.js dijalankan hingga server berhasil berjalan. Jika server sudah aktif, pengguna dapat mengakses alamat server melalui browser untuk memastikan aplikasi berjalan dengan baik.
+Selanjutnya, seluruh fitur pada REST API dapat diuji menggunakan aplikasi Postman atau Insomnia. Pengujian dilakukan dengan mengirim request menggunakan metode HTTP seperti GET, POST, PUT, dan DELETE sesuai dengan endpoint yang tersedia. Semua data yang dikirim dan diterima oleh API menggunakan format JSON, sehingga memudahkan proses pengelolaan data kategori dan produk.
