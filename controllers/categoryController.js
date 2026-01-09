@@ -1,22 +1,54 @@
-const { Category } = require('../models');
+import db from "../config/db.js";
 
-module.exports = {
-    async create(req, res) {
-        const data = await Category.create(req.body);
-        res.json(data);
-    },
-    async list(req, res) {
-        res.json(await Category.findAll());
-    },
-    async detail(req, res) {
-        res.json(await Category.findByPk(req.params.id));
-    },
-    async update(req, res) {
-        await Category.update(req.body, { where: { id: req.params.id } });
-        res.json({ message: 'Updated' });
-    },
-    async remove(req, res) {
-        await Category.destroy({ where: { id: req.params.id } });
-        res.json({ message: 'Deleted' });
-    }
+export const getCategories = (req, res) => {
+    db.query("SELECT * FROM categories", (err, result) => {
+        if (err) res.status(500).json(err);
+        res.json(result);
+    });
+};
+
+export const getCategoriesById = (req, res) => {
+    db.query(
+        "SELECT * FROM categories WHERE id = ?",
+        [req.params.id],
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result[0] || {});
+        }
+    );
+};
+
+export const createCategory = (req, res) => {
+    const { name } = req.body;
+    db.query(
+        "INSERT INTO categories (name) VALUES (?)",
+        [name],
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json({ id: result.insertId, name});
+        }
+    );
+};
+
+export const updateCategory = (req, res) => {
+    const { name } = req.body;
+    db.query(
+        "UPDATE categories SET name = ? WHERE id = ?",
+        [name, req.params.id],
+        (err) => {
+            if (err) return res.status(500).json(err);
+            res.json({ message: "category updated" });
+        }
+    );
+};
+
+export const deleteCategory = (req, res) => {
+    db.query(
+        "DELETE FROM categories WHERE id = ?",
+        [req.params.id],
+        (err) => {
+            if (err) return res.status(500).json(err);
+            res.json({ message: "category deleted" });
+        }
+    );
 };

@@ -1,24 +1,32 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const { sequelize } = require('./models');
-
-const categoryRoutes = require('./routes/categoryRoutes');
-const productRoutes = require('./routes/productRoutes');
+import express from "express";
+import cors from "cors";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import {
+  getUsers,
+  insertUser,
+  showById,
+  updateUser,
+  deleteUser
+} from "./controllers/userController.js";
 
 const app = express();
-app.use(bodyParser.json());
+const PORT = 3000;
 
-// ROUTE ROOT 
-app.get('/', (req, res) => {
-    res.json({ message: 'Server API berjalan' });
-});
+app.use(express.json());
+app.use(cors());
 
-// ROUTE API
-app.use('/api/categories', categoryRoutes);
-app.use('/api/products', productRoutes);
+// category & product
+app.use("/categories", categoryRoutes);
+app.use("/products", productRoutes);
 
-sequelize.sync().then(() => {
-    app.listen(3000, () => {
-        console.log('Server running on http://localhost:3000');
-    });
+// users
+app.get("/users", getUsers);
+app.post("/users", insertUser);
+app.get("/users/:id", showById);
+app.put("/users/:id", updateUser);      //PUT
+app.delete("/users/:id", deleteUser);   //DELETE
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
